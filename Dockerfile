@@ -5,12 +5,15 @@ FROM php:8.2-apache
 RUN apt-get update && apt-get install -y \
         git unzip libzip-dev libpng-dev libonig-dev libxml2-dev curl \
     && docker-php-ext-install pdo_mysql mbstring zip bcmath gd \
-    && a2enmod rewrite \
-    && a2dismod mpm_event mpm_worker 2>/dev/null || true \
-    && a2enmod mpm_prefork \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
+
+# mod_php hanya kompatibel dengan mpm_prefork. Hapus paksa MPM lain agar tidak
+# "More than one MPM loaded", lalu aktifkan prefork + rewrite.
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.* \
+          /etc/apache2/mods-enabled/mpm_worker.* \
+    && a2enmod mpm_prefork rewrite
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

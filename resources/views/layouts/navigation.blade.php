@@ -5,8 +5,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+                        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.5a4.5 4.5 0 0 0-2.5-4.03V6.5a1.5 1.5 0 0 0-2.56-1.06l-.7.7A8.7 8.7 0 0 0 12 5.5c-4.14 0-7.5 2.91-7.5 6.5 0 1.86.9 3.53 2.34 4.7L6 19.5h2.5l.5-1.27c.47.09.96.15 1.47.18l.53 1.09h2.5l.5-1.45c2.69-.9 4.5-3.06 4.5-5.55Z"/>
+                                <circle cx="15.5" cy="11.5" r="1" fill="currentColor" stroke="none"/>
+                            </svg>
+                        </span>
+                        <span class="font-bold text-gray-800 text-lg tracking-tight">Tabungan KIA</span>
                     </a>
                 </div>
 

@@ -9,21 +9,45 @@
 
             {{-- Kartu ringkasan --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white rounded-xl shadow p-5">
-                    <p class="text-sm text-gray-500">Total Saldo</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-800">@rupiah($totalBalance)</p>
+                {{-- Total Saldo: kartu gradien sebagai sorotan utama --}}
+                <div class="rounded-2xl p-5 bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-1 hover:shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-indigo-100">Total Saldo</p>
+                        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-white/20">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h4m-4 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        </span>
+                    </div>
+                    <p class="mt-2 text-2xl font-bold">@rupiah($totalBalance)</p>
                 </div>
-                <div class="bg-white rounded-xl shadow p-5">
-                    <p class="text-sm text-gray-500">Pemasukan (bulan ini)</p>
-                    <p class="mt-1 text-2xl font-bold text-green-600">@rupiah($incomeMonth)</p>
+
+                <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5 transition hover:-translate-y-1 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-500">Pemasukan <span class="text-xs">(bln ini)</span></p>
+                        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-green-50 text-green-600">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0l-6 6m6-6l6 6"/></svg>
+                        </span>
+                    </div>
+                    <p class="mt-2 text-2xl font-bold text-green-600">@rupiah($incomeMonth)</p>
                 </div>
-                <div class="bg-white rounded-xl shadow p-5">
-                    <p class="text-sm text-gray-500">Pengeluaran (bulan ini)</p>
-                    <p class="mt-1 text-2xl font-bold text-red-600">@rupiah($expenseMonth)</p>
+
+                <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5 transition hover:-translate-y-1 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-500">Pengeluaran <span class="text-xs">(bln ini)</span></p>
+                        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-red-50 text-red-600">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l6-6m-6 6l-6-6"/></svg>
+                        </span>
+                    </div>
+                    <p class="mt-2 text-2xl font-bold text-red-600">@rupiah($expenseMonth)</p>
                 </div>
-                <div class="bg-white rounded-xl shadow p-5">
-                    <p class="text-sm text-gray-500">Total Tabungan</p>
-                    <p class="mt-1 text-2xl font-bold text-indigo-600">@rupiah($totalSaved)</p>
+
+                <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5 transition hover:-translate-y-1 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-500">Total Tabungan</p>
+                        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                        </span>
+                    </div>
+                    <p class="mt-2 text-2xl font-bold text-indigo-600">@rupiah($totalSaved)</p>
                 </div>
             </div>
 
@@ -36,11 +60,11 @@
 
             {{-- Chart --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow p-5 lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5 lg:col-span-2">
                     <h3 class="font-semibold text-gray-700 mb-4">Tren 6 Bulan (Pemasukan vs Pengeluaran)</h3>
                     <canvas id="trendChart" height="120"></canvas>
                 </div>
-                <div class="bg-white rounded-xl shadow p-5">
+                <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5">
                     <h3 class="font-semibold text-gray-700 mb-4">Pengeluaran per Kategori</h3>
                     @if ($expenseByCategory->isEmpty())
                         <p class="text-sm text-gray-400">Belum ada pengeluaran bulan ini.</p>
@@ -51,7 +75,7 @@
             </div>
 
             {{-- Progress tabungan --}}
-            <div class="bg-white rounded-xl shadow p-5">
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-gray-700">Progress Tabungan</h3>
                     <a href="{{ route('savings.index') }}" class="text-sm text-indigo-600 hover:underline">Kelola →</a>
@@ -73,7 +97,7 @@
             </div>
 
             {{-- Transaksi terbaru --}}
-            <div class="bg-white rounded-xl shadow p-5">
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-gray-700">Transaksi Terbaru</h3>
                     <a href="{{ route('transactions.index') }}" class="text-sm text-indigo-600 hover:underline">Lihat semua →</a>

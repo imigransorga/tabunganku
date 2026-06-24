@@ -3,3 +3,10 @@
 @tailwind utilities;
 
 [x-cloak] { display: none !important; }
+
+/* animasi muncul lembut untuk konten halaman */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp .35s ease-out both; }

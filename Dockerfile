@@ -1,7 +1,9 @@
-# Image untuk menjalankan Laravel (PHP + Apache) di Railway / Render.
-FROM php:8.2-apache
+# Image untuk menjalankan Laravel di Railway / Render.
+# Pakai PHP CLI + server bawaan Laravel (artisan serve) — tanpa Apache,
+# jadi tidak ada masalah konfigurasi MPM.
+FROM php:8.2-cli
 
-# Dependency sistem + ekstensi PHP yang dibutuhkan Laravel + Node (untuk build aset).
+# Dependency sistem + ekstensi PHP + Node (untuk build aset Vite).
 RUN apt-get update && apt-get install -y \
         git unzip libzip-dev libpng-dev libonig-dev libxml2-dev curl \
     && docker-php-ext-install pdo_mysql mbstring zip bcmath gd \
@@ -9,31 +11,23 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# mod_php hanya kompatibel dengan mpm_prefork. Hapus paksa MPM lain agar tidak
-# "More than one MPM loaded", lalu aktifkan prefork + rewrite.
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.* \
-          /etc/apache2/mods-enabled/mpm_worker.* \
-    && a2enmod mpm_prefork rewrite
-
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Salin seluruh source (vendor & node_modules diabaikan via .dockerignore).
+# Salin source (vendor & node_modules diabaikan via .dockerignore).
 COPY . .
 
 # .env sementara agar perintah artisan saat build tidak error.
-# Konfigurasi sebenarnya diambil dari Environment Variables Railway/Render saat runtime.
+# Konfigurasi sebenarnya dari Environment Variables Railway/Render saat runtime.
 RUN cp .env.example .env \
     && composer install --no-dev --optimize-autoloader --no-interaction \
     && npm ci && npm run build && rm -rf node_modules \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# Arahkan Apache ke folder public Laravel.
-COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["start.sh"]

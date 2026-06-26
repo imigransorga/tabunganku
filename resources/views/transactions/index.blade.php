@@ -57,17 +57,24 @@
                                 </td>
                                 <td class="text-right px-4 whitespace-nowrap">
                                     @if ($t->status === 'pending')
-                                        <form action="{{ route('transactions.approve', $t) }}" method="POST" class="inline">
+                                        <form action="{{ route('transactions.approve', $t) }}" method="POST" class="inline"
+                                              data-confirm="Setujui pengeluaran ini? Saldo akun akan berkurang."
+                                              data-confirm-title="Setujui pengajuan?" data-confirm-icon="question"
+                                              data-confirm-color="#16a34a" data-confirm-yes="Ya, setujui">
                                             @csrf @method('PATCH')
                                             <button class="text-green-600 hover:underline">Setujui</button>
                                         </form>
-                                        <form action="{{ route('transactions.reject', $t) }}" method="POST" class="inline ms-1">
+                                        <form action="{{ route('transactions.reject', $t) }}" method="POST" class="inline ms-1"
+                                              data-confirm="Tolak pengajuan pengeluaran ini?"
+                                              data-confirm-title="Tolak pengajuan?" data-confirm-color="#d97706" data-confirm-yes="Ya, tolak">
                                             @csrf @method('PATCH')
                                             <button class="text-amber-600 hover:underline">Tolak</button>
                                         </form>
                                     @endif
                                     <a href="{{ route('transactions.edit', $t) }}" class="text-indigo-600 hover:underline ms-1">Edit</a>
-                                    <form action="{{ route('transactions.destroy', $t) }}" method="POST" class="inline ms-1" onsubmit="return confirm('Hapus transaksi ini?')">
+                                    <form action="{{ route('transactions.destroy', $t) }}" method="POST" class="inline ms-1"
+                                          data-confirm="Transaksi yang dihapus tidak bisa dikembalikan."
+                                          data-confirm-title="Hapus transaksi?" data-confirm-color="#dc2626" data-confirm-yes="Ya, hapus">
                                         @csrf @method('DELETE')
                                         <button class="text-red-600 hover:underline">Hapus</button>
                                     </form>

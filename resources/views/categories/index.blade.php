@@ -62,7 +62,9 @@
                                 </td>
                                 <td class="text-right">
                                     <button @click="edit = !edit" class="text-indigo-600 hover:underline text-sm">Edit</button>
-                                    <form action="{{ route('categories.destroy', $c) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kategori ini?')">
+                                    <form action="{{ route('categories.destroy', $c) }}" method="POST" class="inline"
+                                          data-confirm="Kategori akan dihapus dari transaksi terkait."
+                                          data-confirm-title="Hapus kategori?" data-confirm-color="#dc2626" data-confirm-yes="Ya, hapus">
                                         @csrf @method('DELETE')
                                         <button class="text-red-600 hover:underline text-sm ms-2">Hapus</button>
                                     </form>

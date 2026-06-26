@@ -33,6 +33,10 @@ class TransactionController extends Controller
     {
         $data = $this->validateData($request);
 
+        if ($msg = $this->budgetError($request, $data)) {
+            return back()->withErrors(['amount' => $msg])->withInput();
+        }
+
         // Income langsung approved; expense masuk sebagai pengajuan (pending).
         if ($data['type'] === 'income') {
             $data['status'] = 'approved';
@@ -60,6 +64,11 @@ class TransactionController extends Controller
     {
         $this->authorizeOwner($transaction);
         $data = $this->validateData($request);
+
+        if ($msg = $this->budgetError($request, $data, $transaction->id)) {
+            return back()->withErrors(['amount' => $msg])->withInput();
+        }
+
         $transaction->update($data);
 
         return redirect()->route('transactions.index')->with('success', 'Transaksi diperbarui.');
@@ -114,5 +123,43 @@ class TransactionController extends Controller
     private function authorizeOwner(Transaction $transaction): void
     {
         abort_unless($transaction->user_id === request()->user()->id, 403);
+    }
+
+    /**
+     * Cek apakah expense melebihi budget kategori pada bulan transaksi.
+     * Mengembalikan pesan error bila melebihi, atau null bila aman.
+     */
+    private function budgetError(Request $request, array $data, ?int $ignoreId = null): ?string
+    {
+        if ($data['type'] !== 'expense' || empty($data['category_id'])) {
+            return null;
+        }
+
+        $budget = $request->user()->budgets()->where('category_id', $data['category_id'])->first();
+        if (! $budget) {
+            return null; // kategori tanpa budget = tidak dibatasi
+        }
+
+        $start = Carbon::parse($data['date'])->startOfMonth();
+        $end = Carbon::parse($data['date'])->endOfMonth();
+
+        $spent = (float) $request->user()->transactions()
+            ->where('category_id', $data['category_id'])
+            ->where('type', 'expense')
+            ->whereIn('status', ['approved', 'pending'])
+            ->whereBetween('date', [$start, $end])
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+            ->sum('amount');
+
+        if ($spent + (float) $data['amount'] > (float) $budget->amount) {
+            $sisa = max(0, (float) $budget->amount - $spent);
+            $fmt = fn ($v) => 'Rp ' . number_format((float) $v, 0, ',', '.');
+
+            return 'Melebihi budget! Budget bulan ini ' . $fmt($budget->amount)
+                . ', sudah terpakai ' . $fmt($spent)
+                . ', sisa hanya ' . $fmt($sisa) . '.';
+        }
+
+        return null;
     }
 }

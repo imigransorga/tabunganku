@@ -4,6 +4,7 @@
         ['route' => 'accounts.index',      'pattern' => 'accounts.*',     'label' => 'Akun & Saldo', 'icon' => 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'],
         ['route' => 'transactions.index',  'pattern' => 'transactions.*', 'label' => 'Transaksi',    'icon' => 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4'],
         ['route' => 'savings.index',       'pattern' => 'savings.*',      'label' => 'Tabungan',     'icon' => 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
+        ['route' => 'budgets.index',       'pattern' => 'budgets.*',      'label' => 'Budget',       'icon' => 'M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z'],
         ['route' => 'categories.index',    'pattern' => 'categories.*',   'label' => 'Kategori',     'icon' => 'M7 7h.01M7 3h5a2 2 0 011.41.59l7 7a2 2 0 010 2.82l-5 5a2 2 0 01-2.82 0l-7-7A2 2 0 014 9V4a1 1 0 011-1z'],
     ];
 @endphp
@@ -32,8 +33,8 @@
                         <a href="{{ route($item['route']) }}"
                            class="group inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition
                                   {{ $active
-                                       ? 'bg-indigo-50 text-indigo-700'
-                                       : 'text-gray-500 hover:text-indigo-700 hover:bg-gray-50' }}">
+                                       ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300'
+                                       : 'text-gray-500 hover:text-indigo-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-indigo-300' }}">
                             <svg class="w-5 h-5 transition group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
                             </svg>
@@ -44,7 +45,14 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-1">
+                {{-- Toggle tema --}}
+                <button onclick="toggleTheme()" title="Ganti tema"
+                        class="p-2 rounded-lg text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700 transition">
+                    <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                    <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                </button>
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
@@ -92,7 +100,7 @@
                 @php $active = request()->routeIs($item['pattern']); @endphp
                 <a href="{{ route($item['route']) }}"
                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-base font-medium transition
-                          {{ $active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                          {{ $active ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300' }}">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
                     </svg>
@@ -112,6 +120,10 @@
                 </div>
             </div>
             <div class="mt-3 space-y-1 px-2">
+                <button type="button" onclick="toggleTheme()"
+                        class="w-full text-start ps-3 pe-4 py-2 rounded-lg text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    🌗 Ganti tema (gelap/terang)
+                </button>
                 <x-responsive-nav-link :href="route('profile.edit')">{{ __('Profile') }}</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

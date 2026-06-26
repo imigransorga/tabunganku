@@ -28,7 +28,9 @@
                         <p class="mt-3 text-2xl font-bold text-gray-800">@rupiah($account->balance)</p>
                         <div class="mt-4 flex gap-3 text-sm">
                             <a href="{{ route('accounts.edit', $account) }}" class="text-indigo-600 hover:underline">Edit</a>
-                            <form action="{{ route('accounts.destroy', $account) }}" method="POST" onsubmit="return confirm('Hapus akun ini? Semua transaksinya ikut terhapus.')">
+                            <form action="{{ route('accounts.destroy', $account) }}" method="POST"
+                                  data-confirm="Semua transaksi di akun ini ikut terhapus."
+                                  data-confirm-title="Hapus akun?" data-confirm-color="#dc2626" data-confirm-yes="Ya, hapus">
                                 @csrf @method('DELETE')
                                 <button class="text-red-600 hover:underline">Hapus</button>
                             </form>

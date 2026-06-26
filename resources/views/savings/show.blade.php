@@ -73,7 +73,9 @@
                                 <td class="text-gray-600">{{ $d->account->name ?? '-' }}</td>
                                 <td class="text-right font-medium text-indigo-600">@rupiah($d->amount)</td>
                                 <td class="text-right">
-                                    <form action="{{ route('savings.deposits.destroy', [$goal, $d]) }}" method="POST" onsubmit="return confirm('Hapus setoran ini?')">
+                                    <form action="{{ route('savings.deposits.destroy', [$goal, $d]) }}" method="POST"
+                                          data-confirm="Setoran ini akan dihapus dan saldo akun dikembalikan."
+                                          data-confirm-title="Hapus setoran?" data-confirm-color="#dc2626" data-confirm-yes="Ya, hapus">
                                         @csrf @method('DELETE')
                                         <button class="text-red-600 hover:underline text-sm">Hapus</button>
                                     </form>

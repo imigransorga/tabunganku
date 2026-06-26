@@ -7,6 +7,12 @@
 
         <title>{{ config('app.name', 'Tabungan KIA') }}</title>
 
+        <script>
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        </script>
+
         @include('partials.pwa-head')
 
         <!-- Fonts -->

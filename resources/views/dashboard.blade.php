@@ -134,6 +134,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
+        // warna teks grafik mengikuti tema
+        Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
+        Chart.defaults.borderColor = document.documentElement.classList.contains('dark') ? '#334155' : '#e5e7eb';
+
         const trend = @json($trend);
         new Chart(document.getElementById('trendChart'), {
             type: 'bar',

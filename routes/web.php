@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -18,6 +19,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('accounts', AccountController::class)->except('show');
     Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('budgets', [BudgetController::class, 'index'])->name('budgets.index');
+    Route::post('budgets', [BudgetController::class, 'store'])->name('budgets.store');
+    Route::delete('budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
 
     Route::resource('transactions', TransactionController::class)->except('show');
     Route::patch('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
